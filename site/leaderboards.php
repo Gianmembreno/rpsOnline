@@ -26,19 +26,22 @@
         </thead>
         <tbody>
             <?php 
-                $query = "SELECT * FROM users ORDER BY userWins ASC";
+                $query = "SELECT * FROM users ORDER BY userWins DESC";
                 $query_run = mysqli_query($db, $query);
                 // $name = $_SESSION['username'];
 
                 if(mysqli_num_rows($query_run) > 0 ){
                     foreach($query_run as $row){
+                        $totalGames = $row['userWins'] + $row['userLoss'] + $row['userTies'];
+                        if($totalGames == 0){ $gamesPlayed = 0; } else { $gamesPlayed = bcdiv($row['userWins'],$totalGames, 3 );}
+                    
                         ?>
                         <tr>
                             <td><?php echo $row['username']; ?></td>
                             <td><?php echo $row['userWins']; ?></td>
                             <td><?php echo $row['userLoss']; ?></td>
                             <td><?php echo $row['userTies']; ?></td>
-                            <td>na</td>
+                            <td><?php   if($totalGames == 0){echo 0;} else { echo $gamesPlayed;}?></td>
                         </tr>
                         <?php
                     }
